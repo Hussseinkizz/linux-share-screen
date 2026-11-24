@@ -98,7 +98,7 @@ relay-engine --backend wayland| x11 --port <port> \
 
 - Token file must be owned by the user, ≤66 bytes, exactly 64 lowercase hex,
   no group/other permission bits (the app writes 0600).
-- COSMIC requires the patched engine (`~/CODE/screen-relay`); stock engines
+- COSMIC requires the patched engine (see `engine/README.md`); stock engines
   fail with `zwlr_screencopy_manager_v1` missing.
 - Viewer assets are required at `--viewer-dir`.
 
