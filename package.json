@@ -1,0 +1,34 @@
+{
+	"name": "linux-screen-share",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Share your Linux screen to any TV or phone browser with one click.",
+	"type": "module",
+	"scripts": {
+		"start": "bun run resources && vite build && electrobun dev",
+		"dev": "bun run resources && vite build && electrobun dev --watch",
+		"dev:live": "bun run resources && vite build && concurrently -k \"vite build --watch\" \"electrobun dev --watch\"",
+		"typecheck": "tsc --noEmit",
+		"build": "bun run resources && vite build && electrobun build",
+		"resources": "bun scripts/sync-resources.mjs",
+		"fetch:cloudflared": "bun scripts/fetch-cloudflared.mjs",
+		"smoke": "bun scripts/smoke-session.ts"
+	},
+	"dependencies": {
+		"electrobun": "1.18.1",
+		"qrcode": "^1.5.4",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0"
+	},
+	"devDependencies": {
+		"@types/bun": "1.3.8",
+		"@types/qrcode": "^1.5.5",
+		"@types/react": "^19.0.0",
+		"@types/react-dom": "^19.0.0",
+		"@vitejs/plugin-react": "^4.3.4",
+		"concurrently": "^9.1.0",
+		"esbuild": "^0.24.0",
+		"typescript": "^5.7.2",
+		"vite": "^6.0.3"
+	}
+}
