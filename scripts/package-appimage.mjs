@@ -57,10 +57,12 @@ chmodSync(appRun, 0o755);
 
 await cp(join(root, "assets", "icon.png"), join(appdir, "linux-screen-share.png"));
 await mkdir(join(appdir, "usr", "share", "metainfo"), { recursive: true });
-await cp(join(root, "assets", "linux-screen-share.appdata.xml"),
-  join(appdir, "usr", "share", "metainfo", "linux-screen-share.appdata.xml"));
+await cp(join(root, "assets", "dev.linuxscreenshare.app.appdata.xml"),
+  join(appdir, "usr", "share", "metainfo", "dev.linuxscreenshare.app.appdata.xml"));
+await mkdir(join(appdir, "usr", "share", "applications"), { recursive: true });
+await writeFile(join(appdir, "usr", "share", "applications", "dev.linuxscreenshare.app.desktop"), "[Desktop Entry]\nType=Application\nName=Linux Screen Share\nExec=AppRun\nIcon=linux-screen-share\nCategories=Network;RemoteAccess;\nTerminal=false\n");
 await writeFile(
-	join(appdir, "linux-screen-share.desktop"),
+	join(appdir, "dev.linuxscreenshare.app.desktop"),
 	[
 		"[Desktop Entry]",
 		"Type=Application",

@@ -59,7 +59,7 @@ for (const dir of [libDir, binDir, applications, iconDir, metainfo, docDir, debi
 
 await cp(installed, libDir, { recursive: true });
 await cp(join(root, "assets", "icon.png"), join(iconDir, "screen-share.png"));
-await cp(join(root, "assets", "linux-screen-share.appdata.xml"), join(metainfo, "linux-screen-share.appdata.xml"));
+await cp(join(root, "assets", "dev.linuxscreenshare.app.appdata.xml"), join(metainfo, "dev.linuxscreenshare.app.appdata.xml"));
 await cp(join(root, "LICENSE"), join(docDir, "copyright"));
 
 const wrapper = join(binDir, "screen-share");
@@ -67,7 +67,7 @@ await writeFile(wrapper, '#!/bin/sh\nexec /usr/lib/screen-share/bin/launcher "$@
 chmodSync(wrapper, 0o755);
 
 await writeFile(
-	join(applications, "screen-share.desktop"),
+	join(applications, "dev.linuxscreenshare.app.desktop"),
 	[
 		"[Desktop Entry]",
 		"Type=Application",

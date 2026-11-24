@@ -31,7 +31,7 @@ echo "==> version $VERSION"
 sed -i "s/\"version\": \"[0-9.]*\"/\"version\": \"$VERSION\"/" package.json
 sed -i "s/version: \"[0-9.]*\"/version: \"$VERSION\"/" electrobun.config.ts
 sed -i "s/APP_VERSION = \"[0-9.]*\"/APP_VERSION = \"$VERSION\"/" src/shared/version.ts
-sed -i "s/<release version=\"[0-9.]*\"/<release version=\"$VERSION\"/" assets/linux-screen-share.appdata.xml
+sed -i "s/<release version=\"[0-9.]*\"/<release version=\"$VERSION\"/" assets/dev.linuxscreenshare.app.appdata.xml
 
 echo "==> typecheck"
 bun run typecheck
