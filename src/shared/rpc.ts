@@ -9,6 +9,7 @@ export interface ShareState {
 	logs: string[];
 	lanIp: string | null;
 	audio: boolean;
+	namedTunnel: string | null;
 	version: string;
 }
 
@@ -31,6 +32,8 @@ export type AppRPC = {
 			stop: { params: {}; response: ShareState };
 			rotateToken: { params: {}; response: ShareState };
 			setAudio: { params: { enabled: boolean }; response: ShareState };
+			setTunnel: { params: { token: string; hostname: string }; response: ShareState };
+			getPreview: { params: {}; response: { data: string | null; error?: string } };
 			openExternal: { params: { url: string }; response: boolean };
 			copyText: { params: { text: string }; response: boolean };
 		};

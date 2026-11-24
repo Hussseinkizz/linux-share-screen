@@ -65,6 +65,49 @@ export class TunnelManager {
 		});
 	}
 
+	/** Runs a named tunnel with the token from the Cloudflare dashboard. The
+	 *  public hostname must point at the engine's local port in Cloudflare. */
+	async startNamed(token: string, timeoutMs = 30000): Promise<void> {
+		await this.stop();
+		const proc = Bun.spawn({
+			cmd: [cloudflaredBinary(), "tunnel", "--no-autoupdate", "run", "--token", token],
+			stdout: "ignore",
+			stderr: "pipe",
+			env: process.env,
+		});
+		this.proc = proc;
+		log.add("named tunnel starting");
+		return new Promise<void>((resolve, reject) => {
+			let settled = false;
+			let buffer = "";
+			const finish = (error?: Error) => {
+				if (settled) return;
+				settled = true;
+				clearTimeout(timer);
+				if (error) reject(error);
+				else resolve();
+			};
+			const timer = setTimeout(() => finish(new Error("The tunnel did not connect in time")), timeoutMs);
+			const pump = async () => {
+				const reader = proc.stderr.getReader();
+				const decoder = new TextDecoder();
+				for (;;) {
+					const { done, value } = await reader.read();
+					if (done) return;
+					buffer += decoder.decode(value, { stream: true });
+					const lines = buffer.split("\n");
+					buffer = lines.pop() ?? "";
+					for (const line of lines) {
+						log.add(`tunnel: ${line.trim()}`);
+						if (/Registered tunnel connection|Connection .*registered/i.test(line)) finish();
+					}
+				}
+			};
+			pump().catch((error) => finish(error instanceof Error ? error : new Error(String(error))));
+			proc.exited.then((code) => finish(new Error(`The tunnel exited (code ${code})`)));
+		});
+	}
+
 	async stop(): Promise<void> {
 		const proc = this.proc;
 		this.proc = null;

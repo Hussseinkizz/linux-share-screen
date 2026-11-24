@@ -43,6 +43,10 @@ export class SessionManager {
 	private link: string | null = null;
 	private error: string | null = null;
 	private audio = readConfig().audio ?? true;
+	private named = readConfig().namedTunnel;
+	private port = 0;
+	private sessionToken = "";
+	private sessionTls = false;
 	private busy = false;
 
 	onChange?: (state: ShareState) => void;
@@ -56,6 +60,7 @@ export class SessionManager {
 			logs: log.tail(20),
 			lanIp: pickLanIp(),
 			audio: this.audio,
+			namedTunnel: this.named?.hostname ?? null,
 			version: APP_VERSION,
 		};
 	}
@@ -98,6 +103,40 @@ export class SessionManager {
 		return this.state();
 	}
 
+	setTunnel(token: string, hostname: string): ShareState {
+		const cleanToken = token.trim(), cleanHost = hostname.trim().toLowerCase();
+		if (!cleanToken && !cleanHost) {
+			this.named = undefined;
+		} else if (!cleanToken || !cleanHost) {
+			throw new Error("A named tunnel needs both a token and a hostname");
+		} else if (!/^[a-z0-9.-]+$/.test(cleanHost) || cleanHost.startsWith(".") || cleanHost.endsWith(".")) {
+			throw new Error("Hostname must look like share.example.com");
+		} else {
+			this.named = { token: cleanToken, hostname: cleanHost };
+		}
+		writeConfig({ ...readConfig(), namedTunnel: this.named });
+		this.emit();
+		return this.state();
+	}
+
+	/** A still frame from the running session, for the preview tab. */
+	async preview(): Promise<{ data: string | null; error?: string }> {
+		if (this.status !== "sharing" || !this.port || !this.sessionToken) return { data: null };
+		try {
+			const scheme = this.sessionTls ? "https" : "http";
+			const response = await fetch(`${scheme}://127.0.0.1:${this.port}/screenshot.png`, {
+				headers: { Authorization: `Bearer ${this.sessionToken}` },
+				// Home network sessions use a self-signed certificate.
+				tls: { rejectUnauthorized: false },
+			});
+			if (!response.ok) return { data: null, error: `Screenshot failed (${response.status})` };
+			const bytes = Buffer.from(await response.arrayBuffer());
+			return { data: `data:image/png;base64,${bytes.toString("base64")}` };
+		} catch (error) {
+			return { data: null, error: error instanceof Error ? error.message : String(error) };
+		}
+	}
+
 	private audioFlags(): string[] {
 		if (!this.audio) return [];
 		const parec = join(resourcesDir(), "parec");
@@ -118,13 +157,27 @@ export class SessionManager {
 	private async launch(mode: Mode): Promise<void> {
 		const { backend, note } = backendFromEnvironment();
 		const token = ensureToken();
-		const port = await findFreePort();
+		const named = mode === "internet" ? readConfig().namedTunnel : undefined;
+		let port: number;
+		try {
+			port = named?.token ? await findFreePort(8137, 8137) : await findFreePort();
+		} catch {
+			throw new Error("Port 8137 is busy. A named tunnel expects http://127.0.0.1:8137 in Cloudflare.");
+		}
+		this.port = port;
+		this.sessionToken = token;
+		this.sessionTls = mode === "lan";
 		log.add(`starting${mode === "internet" ? " (internet)" : " (home network)"} on ${backend}, ${note}`);
 
 		let base: string;
 		const args = [engineBinary(), "--backend", backend, "--port", String(port), "--token-file", tokenFile(), "--viewer-dir", viewerDir(), ...this.audioFlags()];
 
-		if (mode === "internet") {
+		if (mode === "internet" && named?.token && named.hostname) {
+			await this.tunnel.startNamed(named.token);
+			base = `https://${named.hostname}`;
+			args.push("--bind", "127.0.0.1", "--behind-tls-proxy", "--public-origin", base);
+			log.add(`named tunnel ready: ${base}`);
+		} else if (mode === "internet") {
 			const tunnel = await this.tunnel.start(port);
 			log.add(`tunnel ready: ${tunnel.url}`);
 			args.push("--bind", "127.0.0.1", "--behind-tls-proxy", "--public-origin", tunnel.url);
@@ -256,6 +309,9 @@ export class SessionManager {
 		this.engine = null;
 		if (engine) await killProcess(engine);
 		await this.tunnel.stop();
+		this.port = 0;
+		this.sessionToken = "";
+		this.sessionTls = false;
 	}
 
 	/** Synchronous last-resort cleanup for process exit handlers. */

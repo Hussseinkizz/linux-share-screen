@@ -7,6 +7,7 @@ interface PersistedConfig {
 	mode?: Mode;
 	port?: number;
 	audio?: boolean;
+	namedTunnel?: { token: string; hostname: string };
 }
 
 const file = () => join(configDir(), "config.json");
@@ -21,7 +22,7 @@ export function readConfig(): PersistedConfig {
 
 export function writeConfig(next: PersistedConfig): void {
 	try {
-		writeFileSync(file(), JSON.stringify(next, null, 2));
+		writeFileSync(file(), JSON.stringify(next, null, 2), { mode: 0o600 });
 	} catch {
 		// Best effort only.
 	}

@@ -205,6 +205,7 @@ engine feature (next candidate after v1).
 | 2 | Bundle cloudflared, tunnel mode | done |
 | 3 | UX polish: error mapping, QR, rotation, details | mostly done |
 | 3b | Audio capture, viewer playback, mute controls | done in v1.1.0 |
+| 3c | Preview tab, named tunnel settings | done in v1.3.0 |
 | 4 | Virtual desktop mode + browser launch (full mouse control) | later |
 | 5 | MSE fallback in viewer for TV decode | later |
 | 6 | Packaging: `.deb` / `.AppImage` | later |

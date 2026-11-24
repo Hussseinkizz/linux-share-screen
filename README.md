@@ -32,6 +32,10 @@ Prefer a package manager or the archive installer? See Install below.
 - Streams 1080p at up to 60 frames per second with adaptive bitrate.
 - Shares desktop audio with a Sound on and Sound off control in the viewer.
 - Shows one small window with one primary action.
+- A Preview tab shows a still frame of what is being shared, updated every
+  second.
+- Optional named Cloudflare tunnel for a stable hostname instead of a random
+  quick tunnel address.
 
 ## Install
 
@@ -99,6 +103,7 @@ distributions include it.
      a certificate warning once.
 3. Press Share my screen.
 4. On the other device, open the copied link or scan the QR code.
+5. Open the Preview tab to check the frame locally.
 
 Stop sharing with Stop sharing. Closing the app always stops the session.
 
@@ -113,11 +118,23 @@ Stop sharing with Stop sharing. Closing the app always stops the session.
   planned.
 - Home network mode uses a self signed certificate. Some TV browsers refuse to
   continue past the warning. Internet mode avoids this.
-- Internet mode uses a new random `trycloudflare.com` address each session.
-  Named tunnels and custom domains are planned.
+- Internet mode uses a new random `trycloudflare.com` address each session by
+  default. A named tunnel gives a stable hostname; see Advanced below.
 - A fresh internet link can take up to a minute before DNS resolves on other
   devices. If the page does not load at first, wait and reload.
 - One display at a time. Linux x86_64 only.
+
+## Named tunnel (optional)
+
+Quick tunnels get a random address each session. A Cloudflare named tunnel
+gives a stable hostname such as `share.example.com`.
+
+1. Create a tunnel and a public hostname in the Cloudflare dashboard.
+2. Set the hostname service to `http://127.0.0.1:8137`.
+3. Open Advanced in the app, paste the tunnel token and hostname, and Save.
+
+With both fields set, Internet mode uses the named tunnel. Clear both fields
+to return to a quick tunnel.
 
 ## Requirements
 
@@ -191,5 +208,6 @@ components remain Apache 2.0 and cloudflared remains Apache 2.0. Details are in
 
 ## Roadmap
 
-AppImage with bundled WebKit. MSE fallback for TVs. Microphone capture. Named
-tunnels. Virtual desktop mode with mouse control. Multi monitor picker.
+AppImage with bundled WebKit. MSE fallback for TVs. Microphone capture.
+Window or application sharing. Virtual desktop mode with mouse control.
+Multi monitor picker.

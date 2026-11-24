@@ -43,6 +43,8 @@ are in the README.
 ## Notes
 
 - Desktop audio with a Sound on and Sound off button in the viewer.
+- Preview tab with a still frame of the shared screen.
+- Optional named Cloudflare tunnel for a stable hostname.
 - Microphone capture is not available yet.
 - COSMIC: typing works, mouse control does not (platform protocol gap).
 - Viewing devices need WebCodecs H.264; some TV browsers do not have it.

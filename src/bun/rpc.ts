@@ -21,6 +21,8 @@ export function createRpc(manager: SessionManager) {
 				stop: () => manager.stop(),
 				rotateToken: () => manager.rotateToken(),
 				setAudio: ({ enabled }) => manager.setAudio(enabled),
+				setTunnel: ({ token, hostname }) => manager.setTunnel(token, hostname),
+				getPreview: () => manager.preview(),
 				openExternal: ({ url }) => {
 					try {
 						Bun.spawn(["xdg-open", url], { stdout: "ignore", stderr: "ignore" });

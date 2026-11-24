@@ -61,6 +61,21 @@ viewer schedules chunks through an AudioContext and has a Sound on and Sound
 off button that mutes through a gain node and remembers the choice per
 device.
 
+## Preview
+
+The Preview tab asks the Bun process for a still frame once per second. Bun
+fetches `/screenshot.png` from the engine on loopback with the session token
+and returns a data URL over RPC. Home network sessions use HTTPS with the
+self-signed certificate, so that fetch disables certificate verification for
+loopback only.
+
+## Named tunnel
+
+When a tunnel token and hostname are configured, the app starts
+`cloudflared tunnel run --token` instead of a quick tunnel, then starts the
+engine with `--public-origin https://<hostname>`. The port is fixed at 8137
+because the Cloudflare ingress must point at a known local port.
+
 ## State
 
 - `~/.local/share/linux-screen-share/token` (0600, stable across sessions)
