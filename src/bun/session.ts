@@ -4,7 +4,9 @@ import { ensureCert } from "./certs";
 import { readConfig, writeConfig } from "./config";
 import { log } from "./log";
 import { findFreePort, pickLanIp } from "./net";
-import { engineBinary, viewerDir } from "./paths";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { engineBinary, resourcesDir, viewerDir } from "./paths";
 import { killProcess } from "./process";
 import { ensureToken, rotateToken as rotateStoredToken, tokenFile } from "./token";
 import { TunnelManager } from "./tunnel";
@@ -40,6 +42,7 @@ export class SessionManager {
 	private mode: Mode = readConfig().mode ?? "internet";
 	private link: string | null = null;
 	private error: string | null = null;
+	private audio = readConfig().audio ?? true;
 	private busy = false;
 
 	onChange?: (state: ShareState) => void;
@@ -52,6 +55,7 @@ export class SessionManager {
 			error: this.error,
 			logs: log.tail(20),
 			lanIp: pickLanIp(),
+			audio: this.audio,
 			version: APP_VERSION,
 		};
 	}
@@ -87,6 +91,30 @@ export class SessionManager {
 		return this.state();
 	}
 
+	setAudio(enabled: boolean): ShareState {
+		this.audio = enabled;
+		writeConfig({ ...readConfig(), audio: enabled });
+		this.emit();
+		return this.state();
+	}
+
+	private audioFlags(): string[] {
+		if (!this.audio) return [];
+		const parec = join(resourcesDir(), "parec");
+		const pactl = join(resourcesDir(), "pactl");
+		if (!existsSync(parec) || !existsSync(pactl)) {
+			log.add("audio requested but capture helpers are missing");
+			return [];
+		}
+		const probe = Bun.spawnSync([pactl, "get-default-sink"], { stdout: "pipe", stderr: "ignore" });
+		const sink = new TextDecoder().decode(probe.stdout).trim();
+		if (probe.exitCode !== 0 || !sink) {
+			log.add("audio requested but no default sink was found");
+			return [];
+		}
+		return ["--audio", "--audio-tool", parec, "--audio-device", `${sink}.monitor`];
+	}
+
 	private async launch(mode: Mode): Promise<void> {
 		const { backend, note } = backendFromEnvironment();
 		const token = ensureToken();
@@ -94,7 +122,7 @@ export class SessionManager {
 		log.add(`starting${mode === "internet" ? " (internet)" : " (home network)"} on ${backend}, ${note}`);
 
 		let base: string;
-		const args = [engineBinary(), "--backend", backend, "--port", String(port), "--token-file", tokenFile(), "--viewer-dir", viewerDir()];
+		const args = [engineBinary(), "--backend", backend, "--port", String(port), "--token-file", tokenFile(), "--viewer-dir", viewerDir(), ...this.audioFlags()];
 
 		if (mode === "internet") {
 			const tunnel = await this.tunnel.start(port);

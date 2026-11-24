@@ -28,6 +28,7 @@ const IDLE: ShareState = {
 	error: null,
 	logs: [],
 	lanIp: null,
+	audio: true,
 	version: APP_VERSION,
 };
 
@@ -130,6 +131,16 @@ export function App() {
 					? "Same Wi-Fi. May show a certificate warning on the other device."
 					: "Works anywhere. No certificate warning, but needs internet."}
 			</p>
+
+			<label className="audio-row">
+				<input
+					type="checkbox"
+					checked={state.audio}
+					disabled={sharing || busy}
+					onChange={(event) => api.setAudio({ enabled: event.target.checked })}
+				/>
+				Share audio
+			</label>
 
 			<button className={`primary ${sharing ? "secondary" : ""}`} disabled={busy} onClick={toggle}>
 				{busy ? (

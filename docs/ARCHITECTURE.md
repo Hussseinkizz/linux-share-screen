@@ -50,6 +50,17 @@ Internet:
 
 The token travels in the URL fragment, never to the server or tunnel logs.
 
+## Audio
+
+A second WebSocket at `/audio` carries s16le 48 kHz stereo PCM in 20 ms
+chunks. Each frame has a 16 byte header: big-endian u64 timestamp, big-endian
+u32 sample rate, one byte channel count, three reserved bytes. The engine
+spawns bundled `parec` on the default sink monitor; the app resolves the
+monitor with bundled `pactl`. A failed capture disables audio only. The
+viewer schedules chunks through an AudioContext and has a Sound on and Sound
+off button that mutes through a gain node and remembers the choice per
+device.
+
 ## State
 
 - `~/.local/share/linux-screen-share/token` (0600, stable across sessions)

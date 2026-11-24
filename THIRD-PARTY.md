@@ -12,6 +12,7 @@ separate program rather than re-licensing it.
 | Bun runtime (shipped inside Electrobun bundles) | MIT | https://github.com/oven-sh/bun |
 | WebKitGTK (system package) | LGPL-2.1+ | https://webkitgtk.org |
 | x264 (linked into the engine) | GPL-2.0 | https://www.videolan.org/developers/x264.html |
+| parec and pactl (bundled audio helpers) | LGPL-2.1+ | https://gitlab.freedesktop.org/pulseaudio/pulseaudio |
 
 Notes:
 

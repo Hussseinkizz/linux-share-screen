@@ -8,6 +8,7 @@ export interface ShareState {
 	error: string | null;
 	logs: string[];
 	lanIp: string | null;
+	audio: boolean;
 	version: string;
 }
 
@@ -29,6 +30,7 @@ export type AppRPC = {
 			start: { params: { mode: Mode }; response: ShareState };
 			stop: { params: {}; response: ShareState };
 			rotateToken: { params: {}; response: ShareState };
+			setAudio: { params: { enabled: boolean }; response: ShareState };
 			openExternal: { params: { url: string }; response: boolean };
 			copyText: { params: { text: string }; response: boolean };
 		};

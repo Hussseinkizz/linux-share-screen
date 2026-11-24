@@ -6,6 +6,7 @@ import type { Mode } from "@/shared/rpc";
 interface PersistedConfig {
 	mode?: Mode;
 	port?: number;
+	audio?: boolean;
 }
 
 const file = () => join(configDir(), "config.json");

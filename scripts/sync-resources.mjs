@@ -40,4 +40,14 @@ await copyFile(engineSource, join(resources, "relay-engine"));
 await chmod(join(resources, "relay-engine"), 0o755);
 
 const { size } = await stat(join(resources, "relay-engine"));
+for (const name of ["parec", "pactl"]) {
+	const found = Bun.which(name);
+	if (!found) {
+		console.warn(`warning: ${name} not found; audio capture will be disabled`);
+		continue;
+	}
+	await copyFile(found, join(resources, name));
+	await chmod(join(resources, name), 0o755);
+}
+
 console.log(`resources ready: relay-engine ${(size / 1024).toFixed(0)} KiB, viewer built from ${relayRoot}`);

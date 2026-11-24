@@ -204,6 +204,7 @@ engine feature (next candidate after v1).
 | 1 | Scaffold, bundle engine+viewer, stable token, LAN mode, UI | done |
 | 2 | Bundle cloudflared, tunnel mode | done |
 | 3 | UX polish: error mapping, QR, rotation, details | mostly done |
+| 3b | Audio capture, viewer playback, mute controls | done in v1.1.0 |
 | 4 | Virtual desktop mode + browser launch (full mouse control) | later |
 | 5 | MSE fallback in viewer for TV decode | later |
 | 6 | Packaging: `.deb` / `.AppImage` | later |
@@ -234,7 +235,7 @@ dies; no pnpm/CLI/Caddy/sudo required.
 **Phase 2:** same with Internet mode over `https://*.trycloudflare.com` with no
 certificate prompt on a TV browser.
 
-## 13. Audio (v1.1.0)
+## 13. Audio (shipped in v1.1.0)
 
 Goal: desktop audio plays on the viewing device, with instant mute and
 unmute. Microphone capture is not part of this release.

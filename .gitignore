@@ -6,6 +6,8 @@ artifacts
 resources/relay-engine
 resources/cloudflared
 resources/viewer
+resources/parec
+resources/pactl
 *.log
 .tools
 .package-tmp

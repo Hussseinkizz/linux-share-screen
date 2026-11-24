@@ -18,6 +18,12 @@ Changes in `engine/patch/` (copied over the pinned checkout by
   (ext-image-copy-capture backend, shm path), accepts ABGR/XBGR shm formats
   with an R↔B swap on damaged regions, and selects the backend when
   wlr-screencopy is unavailable (COSMIC).
+- `src/engine/server/audio.hpp`, `audio.cpp` - new monitor capture through a
+  bundled parec child process, fixed 48 kHz stereo s16le, 20 ms chunks.
+- `src/engine/server/server.hpp`, `server.cpp`, `wire.hpp`, `wire.cpp` - the
+  `/audio` WebSocket, audio sinks with bounded queues, and routing.
+- `src/engine/server/config.hpp`, `config.cpp`, `main.cpp` - `--audio`,
+  `--audio-tool`, `--audio-device` and capture startup.
 - `src/engine/backends/linux/wayland/input.cpp`, virtual pointer is
   optional; pointer jobs no-op with a stderr notice when the compositor
   offers no virtual-pointer protocol.

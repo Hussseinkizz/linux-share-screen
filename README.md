@@ -16,6 +16,7 @@ viewer, and tunnel client.
   certificate warnings.
 - Keeps the link stable between sessions. A single button rotates it.
 - Streams 1080p at up to 60 frames per second with adaptive bitrate.
+- Shares desktop audio with a Sound on and Sound off control in the viewer.
 - Shows one small window with one primary action.
 
 ## Install
@@ -74,8 +75,8 @@ Stop sharing with Stop sharing. Closing the app always stops the session.
 
 ## Known limitations
 
-- Audio is not captured yet. Video only, so films play silently on the other
-  device. Audio is the next feature.
+- Audio comes from the default output monitor. Bandwidth rises by about
+  1.5 Mbps while unmuted. Microphone capture is not available yet.
 - Mouse control is not available on COSMIC. Typing works. The compositor does
   not expose a pointer injection protocol.
 - The viewing device needs WebCodecs H.264 support. Most desktop browsers and
@@ -107,7 +108,7 @@ bun install
 sudo apt install build-essential pkg-config libwebsockets-dev libx264-dev \
   libcap-dev zlib1g-dev libwayland-dev wayland-protocols libxkbcommon-dev \
   libx11-dev libxdamage-dev libxfixes-dev libxtst-dev \
-  libgtk-3-dev libwebkit2gtk-4.1-dev
+  libgtk-3-dev libwebkit2gtk-4.1-dev pulseaudio-utils
 
 bun run fetch:cloudflared
 bun scripts/bootstrap-engine.sh
@@ -159,5 +160,5 @@ components remain Apache 2.0 and cloudflared remains Apache 2.0. Details are in
 
 ## Roadmap
 
-Audio capture. AppImage with bundled WebKit. MSE fallback for TVs. Named
+AppImage with bundled WebKit. MSE fallback for TVs. Microphone capture. Named
 tunnels. Virtual desktop mode with mouse control. Multi monitor picker.
