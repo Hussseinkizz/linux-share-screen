@@ -44,6 +44,8 @@ APPIMAGE="$(ls artifacts/*.AppImage | head -1)"
 UPDATE_JSON="$(ls artifacts/*-update.json | head -1)"
 DEB="$(ls artifacts/*.deb | head -1)"
 SHA="$(sha256sum "$SETUP" | cut -d' ' -f1)"
+SUMS="artifacts/SHA256SUMS"
+( cd artifacts && sha256sum "$(basename "$SETUP")" "$(basename "$APPIMAGE")" "$(basename "$DEB")" > "$(basename "$SUMS")" )
 
 echo "==> commit, tag, push"
 git add -A
@@ -61,7 +63,7 @@ sed \
 	"RELEASE_NOTES.template.md" > "$NOTES"
 
 gh release create "v$VERSION" \
-	"$SETUP" "$APPIMAGE" "$DEB" "$UPDATE_JSON" \
+	"$SETUP" "$APPIMAGE" "$DEB" "$UPDATE_JSON" "$SUMS" \
 	--title "Linux Screen Share v$VERSION" \
 	--notes-file "$NOTES"
 

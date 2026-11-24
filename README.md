@@ -3,10 +3,24 @@
 A simple app to share any Linux device screen to a smart TV or any browser over
 the network, local or remote, easily.
 
+![Linux Screen Share window](assets/screenshot.png)
+
 Press one button, copy the link or scan the QR code, and the screen is live on
 the other device. No accounts, no setup wizard, and no package manager or
 command line knowledge required. The app carries its own streaming engine,
 viewer, and tunnel client.
+
+## Quick start
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Husseinkizz/linux-share-screen/main/install.sh | sh
+```
+
+The script downloads the latest AppImage, verifies its SHA-256 checksum,
+installs it for the current user, and adds a desktop entry. Pin a version with
+`LSS_VERSION=1.2.0`, or remove it later with `./install.sh --uninstall`.
+
+Prefer a package manager or the archive installer? See Install below.
 
 ## What it does
 
@@ -79,7 +93,8 @@ distributions include it.
 
 1. Open Screen Share.
 2. Choose a mode:
-   - Internet: works on any network, including TVs. Recommended.
+   - Internet: works on any network, including TVs. Recommended. A new link
+     can take up to a minute before other devices resolve it.
    - Home network: direct connection on the same Wi-Fi. The other device shows
      a certificate warning once.
 3. Press Share my screen.
@@ -100,6 +115,8 @@ Stop sharing with Stop sharing. Closing the app always stops the session.
   continue past the warning. Internet mode avoids this.
 - Internet mode uses a new random `trycloudflare.com` address each session.
   Named tunnels and custom domains are planned.
+- A fresh internet link can take up to a minute before DNS resolves on other
+  devices. If the page does not load at first, wait and reload.
 - One display at a time. Linux x86_64 only.
 
 ## Requirements
