@@ -1,112 +1,123 @@
 # Linux Screen Share
 
-**A simple app to share any Linux device screen to a smart TV or any browser
-over the network — local or remote — easily.**
+A simple app to share any Linux device screen to a smart TV or any browser over
+the network, local or remote, easily.
 
-Press one button, get a link (or QR code), open it on your TV, phone, or
-laptop, and watch. No accounts, no setup wizard, no pnpm/CLI/Caddy/sudo. The
-app bundles its streaming engine, viewer, and Cloudflare tunnel client.
+Press one button, copy the link or scan the QR code, and the screen is live on
+the other device. No accounts, no setup wizard, and no package manager or
+command line knowledge required. The app carries its own streaming engine,
+viewer, and tunnel client.
 
-- 🖥️ Captures the real desktop on Wayland (COSMIC, Sway, Hyprland) and X11.
-- 📺 Two modes: **Home network** (direct LAN HTTPS) and **Internet**
-  (Cloudflare quick tunnel — real HTTPS certificate, works on TVs, no warning).
-- 🔗 Stable links: a 64-hex token persists across restarts; **New link**
-  rotates it.
-- 🎞️ 1080p60 H.264, adaptive bitrate, typematic keyboard input.
-- 🪶 One small window. One big button.
+## What it does
+
+- Shares the real desktop on Wayland (COSMIC, Sway, Hyprland) and X11.
+- Works on the home network or over the internet through a Cloudflare tunnel.
+  Internet mode gets a valid HTTPS address, so TV browsers connect without
+  certificate warnings.
+- Keeps the link stable between sessions. A single button rotates it.
+- Streams 1080p at up to 60 frames per second with adaptive bitrate.
+- Shows one small window with one primary action.
 
 ## Install
 
-### Option A — AppImage (no sudo)
+### AppImage
 
-1. Download `Linux-Screen-Share-x86_64.AppImage` from the
-   [releases page](https://github.com/Hussseinkizz/linux-share-screen/releases).
+1. Download `Linux-Screen-Share-x86_64.AppImage` from the releases page.
 2. `chmod +x Linux-Screen-Share-x86_64.AppImage`
-3. Double-click it, or run `./Linux-Screen-Share-x86_64.AppImage`.
+3. Run it, or double click it.
 
-If your distro lacks FUSE 2 (Ubuntu 23.10+ ships FUSE 3 only), run:
+Some distributions ship FUSE 3 only. In that case run:
 
 ```sh
 ./Linux-Screen-Share-x86_64.AppImage --appimage-extract-and-run
 ```
 
-### Option B — Installer archive
+### Installer archive
 
 Download `stable-linux-x64-ScreenShare-Setup.tar.gz`, extract it, and run
-`./installer` (or double-click it). It installs to `~/.local/share` and adds a
-desktop shortcut. No sudo.
+`./installer`. The app installs to `~/.local/share` and adds a desktop
+shortcut. No administrator rights are needed.
 
-### Runtime requirements
+### If the app does not start
 
-Any modern desktop with GTK 3 and **WebKitGTK 4.1** (`libwebkit2gtk-4.1-0`).
-Both are present on current Pop!_OS/Ubuntu, Fedora, Arch, and openSUSE
-desktops. If the app does not start, install the dependencies:
+The app needs GTK 3 and WebKitGTK 4.1. Both are present on current desktop
+installs. To add them manually:
 
 ```sh
-# Debian / Ubuntu / Pop!_OS
+# Debian, Ubuntu, Pop!_OS
 sudo apt install libwebkit2gtk-4.1-0 libgtk-3-0
 
 # Fedora
 sudo dnf install webkit2gtk4.1 gtk3
 
-# Arch / Manjaro
+# Arch, Manjaro
 sudo pacman -S webkit2gtk-4.1 gtk3
 
 # openSUSE
 sudo zypper install libwebkit2gtk-4_1-0 gtk3
 ```
 
-Home-network mode also needs `openssl` (already present on mainstream
-distros) to generate its self-signed certificate.
+Home network mode also uses `openssl` to create a local certificate. Mainstream
+distributions include it.
 
 ## Use
 
-1. Open **Screen Share**.
-2. Choose **Internet** (recommended for TVs — valid certificate, works on any
-   network) or **Home network** (same Wi-Fi, may show a certificate warning).
-3. Press **Share my screen**.
-4. On the other device, open the link from **Copy**, or scan **Show QR**.
+1. Open Screen Share.
+2. Choose a mode:
+   - Internet: works on any network, including TVs. Recommended.
+   - Home network: direct connection on the same Wi-Fi. The other device shows
+     a certificate warning once.
+3. Press Share my screen.
+4. On the other device, open the copied link or scan the QR code.
 
-Stop with **Stop sharing**; quitting the app always stops everything.
+Stop sharing with Stop sharing. Closing the app always stops the session.
 
-## Known limitations (v1)
+## Known limitations
 
-- **No audio yet.** Video only — movies are silent on the viewing device.
-  Audio is the next feature after this release.
-- **No mouse control on COSMIC.** COSMIC has no virtual-pointer protocol;
-  typing works, clicking does not. (Sway/Hyprland virtual desktops allow it.)
-- Viewing devices need **WebCodecs H.264** support. Most desktop browsers and
-  recent Android TVs work; some TV browsers do not (MSE fallback planned).
-- **Home-network mode** uses a self-signed certificate: accept the warning on
-  the other device. Some TV browsers refuse it — use Internet mode on TVs.
-- Internet mode gets a **new random `*.trycloudflare.com` URL** each session.
-  Named tunnels/custom domains are planned.
-- One physical display; Linux x86_64.
+- Audio is not captured yet. Video only, so films play silently on the other
+  device. Audio is the next feature.
+- Mouse control is not available on COSMIC. Typing works. The compositor does
+  not expose a pointer injection protocol.
+- The viewing device needs WebCodecs H.264 support. Most desktop browsers and
+  recent Android TVs have it. Some TV browsers do not. An MSE fallback is
+  planned.
+- Home network mode uses a self signed certificate. Some TV browsers refuse to
+  continue past the warning. Internet mode avoids this.
+- Internet mode uses a new random `trycloudflare.com` address each session.
+  Named tunnels and custom domains are planned.
+- One display at a time. Linux x86_64 only.
+
+## Requirements
+
+- Linux x86_64 with a GTK 3 and WebKitGTK 4.1 desktop.
+- A Wayland or X11 session.
+- Internet access for tunnel mode. Home network mode works offline.
 
 ## Build from source
 
-Requirements: Bun ≥ 1.4, C++ toolchain, and the engine's build dependencies.
+Requirements: Bun 1.4 or newer, a C++ toolchain, and the engine build
+dependencies.
 
 ```sh
 git clone https://github.com/Hussseinkizz/linux-share-screen.git
 cd linux-share-screen
 bun install
 
-# engine build deps (Debian/Ubuntu example):
+# Debian and Ubuntu example
 sudo apt install build-essential pkg-config libwebsockets-dev libx264-dev \
   libcap-dev zlib1g-dev libwayland-dev wayland-protocols libxkbcommon-dev \
   libx11-dev libxdamage-dev libxfixes-dev libxtst-dev \
   libgtk-3-dev libwebkit2gtk-4.1-dev
 
-bun run fetch:cloudflared        # download the tunnel client once
-bun scripts/bootstrap-engine.sh  # clone pinned upstream + apply engine patch
+bun run fetch:cloudflared
+bun scripts/bootstrap-engine.sh
 LSS_SCREEN_RELAY=.engine/screen-relay bun run resources
 
-bun run start                    # dev run
-bun run package                  # installer archive + AppImage
+bun run start
+bun run package
 ```
 
-Headless checks:
+Checks:
 
 ```sh
 bun run typecheck
@@ -114,53 +125,39 @@ bun run smoke lan
 bun run smoke internet
 ```
 
-### Cutting a release
+### Release
 
 ```sh
-bun run release 1.0.1   # bumps versions, builds, tags, pushes, creates the GitHub release
+bun run release 1.0.1
 ```
 
-## How it works
+The script bumps versions, builds the installer and AppImage, commits, tags,
+pushes, and creates the GitHub release with checksums.
 
-The app is a control surface around the
-[**screen-relay**](https://github.com/vercel-labs/screen-relay) engine
-(Apache-2.0, by Vercel Labs), patched in `engine/patch/` to support the
-standard `ext-image-copy-capture` Wayland protocol used by COSMIC (upstream
-only speaks `wlr-screencopy`). The engine captures, encodes H.264 with x264,
-serves the viewer and WebSocket stream, and handles token auth.
-
-- **Home network:** engine binds `0.0.0.0:8137–8147` with a generated
-  self-signed certificate and `--public-origin https://<lan-ip>:<port>`.
-- **Internet:** bundled `cloudflared` opens a quick tunnel, then the engine
-  runs loopback-only behind it (`--behind-tls-proxy`).
-- Links carry the token in the URL fragment, so it never reaches the server or
-  tunnel logs.
-
-State lives in `~/.local/share/linux-screen-share/` (token 0600, certs, logs);
-config in `~/.config/linux-screen-share/config.json`.
+Sharing internals are documented in `docs/ARCHITECTURE.md` for contributors.
 
 ## Credits
 
-- **[screen-relay](https://github.com/vercel-labs/screen-relay)** by
-  **Vercel Labs** — the streaming engine, wire protocol, and web viewer this
-  app is built on. Huge thanks: this app would not exist without it.
-- **[Electrobun](https://github.com/blackboardsh/electrobun)** — the Bun +
-  native-webview desktop framework.
-- **[cloudflared](https://github.com/cloudflare/cloudflared)** — Cloudflare
+- screen-relay by Vercel Labs (https://github.com/vercel-labs/screen-relay):
+  the streaming engine, wire protocol, and web viewer this app builds on. This
+  project would not exist without it.
+- Electrobun (https://github.com/blackboardsh/electrobun): the desktop
+  framework.
+- cloudflared (https://github.com/cloudflare/cloudflared): internet mode
   tunnels.
-- **[Bun](https://bun.sh)** — runtime and tooling.
-- **[x264](https://www.videolan.org/developers/x264.html)** — H.264 encoding.
-- The `ext-image-copy-capture` protocol designers and the COSMIC team.
+- Bun (https://bun.sh): runtime and tooling.
+- x264 (https://www.videolan.org/developers/x264.html): video encoding.
+- The authors of the ext-image-copy-capture protocol and the COSMIC desktop.
 
-Third-party licenses are listed in [`THIRD-PARTY.md`](./THIRD-PARTY.md).
+Third party licenses are listed in `THIRD-PARTY.md`.
 
 ## License
 
-GNU General Public License v2.0 — see [`LICENSE`](./LICENSE). The bundled
-screen-relay components remain Apache-2.0 and cloudflared remains Apache-2.0;
-see `THIRD-PARTY.md` for details.
+GNU General Public License version 2. See `LICENSE`. The bundled screen-relay
+components remain Apache 2.0 and cloudflared remains Apache 2.0. Details are in
+`THIRD-PARTY.md`.
 
 ## Roadmap
 
-Audio capture · AppImage with bundled WebKit · MSE fallback for TVs · named
-tunnels · virtual desktop mode with mouse control · multi-monitor picker.
+Audio capture. AppImage with bundled WebKit. MSE fallback for TVs. Named
+tunnels. Virtual desktop mode with mouse control. Multi monitor picker.

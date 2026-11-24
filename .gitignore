@@ -9,3 +9,4 @@ resources/viewer
 *.log
 .tools
 .package-tmp
+.commandcode/

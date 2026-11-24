@@ -1,7 +1,7 @@
 # Linux Screen Share v@VERSION@
 
 **A simple app to share any Linux device screen to a smart TV or any browser
-over the network — local or remote — easily.**
+over the network, local or remote, easily.**
 
 ## Install
 
@@ -19,7 +19,7 @@ chmod +x Linux-Screen-Share-x86_64.AppImage
 Download `stable-linux-x64-ScreenShare-Setup.tar.gz`, extract it, run
 `./installer`. Installs to `~/.local/share` and adds a desktop shortcut.
 
-Requires GTK 3 and WebKitGTK 4.1 (`libwebkit2gtk-4.1-0`) — present on current
+Requires GTK 3 and WebKitGTK 4.1 (`libwebkit2gtk-4.1-0`), present on current
 Pop!_OS/Ubuntu, Fedora, Arch and openSUSE desktops. Manual dependency commands
 are in the README.
 
@@ -27,7 +27,7 @@ are in the README.
 
 1. Open **Screen Share**.
 2. Choose **Internet** (works on TVs, valid certificate) or **Home network**.
-3. Press **Share my screen** — then open the copied link or scan the QR.
+3. Press **Share my screen**, then open the copied link or scan the QR.
 
 ## Notes
 

@@ -17,7 +17,7 @@ Notes:
 
 - `relay-engine` is built from the pinned upstream commit with the patch in
   `engine/patch/` (see `engine/README.md`). Apache-2.0 requires keeping the
-  upstream license and stating modifications — both are satisfied by that
+  upstream license and stating modifications, both are satisfied by that
   document and the upstream `LICENSE` in the engine checkout.
 - `cloudflared` is redistributed unmodified as a separate executable.
 - The engine links x264 (GPL-2.0), which is compatible with this project's
