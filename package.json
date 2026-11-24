@@ -1,6 +1,6 @@
 {
 	"name": "linux-screen-share",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"private": true,
 	"description": "Share your Linux screen to any TV or phone browser with one click.",
 	"type": "module",
