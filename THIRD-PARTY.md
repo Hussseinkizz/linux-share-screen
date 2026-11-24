@@ -1,7 +1,8 @@
 # Third-party components
 
-This app bundles or links third-party components. Their licenses apply to those
-parts; the app's own code is covered by `LICENSE`.
+This project is distributed under GPL-2.0 (see `LICENSE`). Third-party
+components keep their own licenses; the app aggregates the engine as a
+separate program rather than re-licensing it.
 
 | Component | License | Source |
 |---|---|---|
@@ -19,8 +20,7 @@ Notes:
   upstream license and stating modifications — both are satisfied by that
   document and the upstream `LICENSE` in the engine checkout.
 - `cloudflared` is redistributed unmodified as a separate executable.
-- x264 is GPL-2.0. If you redistribute the app publicly, verify GPL
-  compliance for the combined work (linking x264 into the engine makes the
-  engine GPL; the viewer and app are separate). For a fully permissive build,
-  the engine would need a different H.264 encoder or a GPL-compatible license
-  decision.
+- The engine links x264 (GPL-2.0), which is compatible with this project's
+  GPL-2.0 license. The patched engine source is reproducible from
+  `engine/patch/` plus the pinned upstream commit, satisfying the source
+  requirement for binaries we distribute.

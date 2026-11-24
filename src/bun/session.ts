@@ -1,4 +1,5 @@
 import type { Mode, ShareState, Status } from "@/shared/rpc";
+import { APP_VERSION } from "../shared/version";
 import { ensureCert } from "./certs";
 import { readConfig, writeConfig } from "./config";
 import { log } from "./log";
@@ -8,7 +9,6 @@ import { killProcess } from "./process";
 import { ensureToken, rotateToken as rotateStoredToken, tokenFile } from "./token";
 import { TunnelManager } from "./tunnel";
 
-const VERSION = "1.0.0";
 const READY_TIMEOUT_MS = 25000;
 
 function backendFromEnvironment(): { backend: "wayland" | "x11"; note: string } {
@@ -52,7 +52,7 @@ export class SessionManager {
 			error: this.error,
 			logs: log.tail(20),
 			lanIp: pickLanIp(),
-			version: VERSION,
+			version: APP_VERSION,
 		};
 	}
 

@@ -7,3 +7,5 @@ resources/relay-engine
 resources/cloudflared
 resources/viewer
 *.log
+.tools
+.package-tmp

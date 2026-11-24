@@ -12,7 +12,10 @@
 		"build": "bun run resources && vite build && electrobun build",
 		"resources": "bun scripts/sync-resources.mjs",
 		"fetch:cloudflared": "bun scripts/fetch-cloudflared.mjs",
-		"smoke": "bun scripts/smoke-session.ts"
+		"smoke": "bun scripts/smoke-session.ts",
+		"package": "bun run resources && vite build && electrobun build --env=stable && bun scripts/package-appimage.mjs",
+		"appimage": "bun scripts/package-appimage.mjs",
+		"release": "bash scripts/release.sh"
 	},
 	"dependencies": {
 		"electrobun": "1.18.1",

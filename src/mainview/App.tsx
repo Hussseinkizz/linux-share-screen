@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { Electroview } from "electrobun/view";
 import type { AppRPC, Mode, ShareState } from "@/shared/rpc";
+import { APP_VERSION } from "@/shared/version";
 
 const listeners = new Set<(state: ShareState) => void>();
 
@@ -27,7 +28,7 @@ const IDLE: ShareState = {
 	error: null,
 	logs: [],
 	lanIp: null,
-	version: "1.0.0",
+	version: APP_VERSION,
 };
 
 const STATUS_LABEL: Record<ShareState["status"], string> = {
