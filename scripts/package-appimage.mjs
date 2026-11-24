@@ -56,6 +56,9 @@ await writeFile(
 chmodSync(appRun, 0o755);
 
 await cp(join(root, "assets", "icon.png"), join(appdir, "linux-screen-share.png"));
+await mkdir(join(appdir, "usr", "share", "metainfo"), { recursive: true });
+await cp(join(root, "assets", "linux-screen-share.appdata.xml"),
+  join(appdir, "usr", "share", "metainfo", "linux-screen-share.appdata.xml"));
 await writeFile(
 	join(appdir, "linux-screen-share.desktop"),
 	[

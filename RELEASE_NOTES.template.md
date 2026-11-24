@@ -5,6 +5,14 @@ over the network, local or remote, easily.**
 
 ## Install
 
+### Debian and Ubuntu
+
+```sh
+sudo apt install ./screen-share_@VERSION@_amd64.deb
+```
+
+APT pulls in WebKitGTK and the other runtime libraries.
+
 ### AppImage (no sudo)
 
 ```sh
@@ -18,6 +26,9 @@ chmod +x Linux-Screen-Share-x86_64.AppImage
 
 Download `stable-linux-x64-ScreenShare-Setup.tar.gz`, extract it, run
 `./installer`. Installs to `~/.local/share` and adds a desktop shortcut.
+
+The AppImage and the installer archive use the system WebKitGTK; the .deb
+declares it as a dependency.
 
 Requires GTK 3 and WebKitGTK 4.1 (`libwebkit2gtk-4.1-0`), present on current
 Pop!_OS/Ubuntu, Fedora, Arch and openSUSE desktops. Manual dependency commands

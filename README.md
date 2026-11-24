@@ -21,13 +21,27 @@ viewer, and tunnel client.
 
 ## Install
 
+### Debian and Ubuntu (.deb)
+
+Download `screen-share_<version>_amd64.deb` and open it in the software
+center, or run:
+
+```sh
+sudo apt install ./screen-share_<version>_amd64.deb
+```
+
+APT installs the required libraries automatically, including WebKitGTK. The
+app then appears in the application menu as Linux Screen Share.
+
 ### AppImage
 
 1. Download `Linux-Screen-Share-x86_64.AppImage` from the releases page.
 2. `chmod +x Linux-Screen-Share-x86_64.AppImage`
 3. Run it, or double click it.
 
-Some distributions ship FUSE 3 only. In that case run:
+The AppImage uses the WebKitGTK libraries already present on the system. If
+the app does not start, install them with the commands further down. Some
+distributions ship FUSE 3 only, in which case run:
 
 ```sh
 ./Linux-Screen-Share-x86_64.AppImage --appimage-extract-and-run
@@ -108,7 +122,7 @@ bun install
 sudo apt install build-essential pkg-config libwebsockets-dev libx264-dev \
   libcap-dev zlib1g-dev libwayland-dev wayland-protocols libxkbcommon-dev \
   libx11-dev libxdamage-dev libxfixes-dev libxtst-dev \
-  libgtk-3-dev libwebkit2gtk-4.1-dev pulseaudio-utils
+  libgtk-3-dev libwebkit2gtk-4.1-dev pulseaudio-utils dpkg-dev
 
 bun run fetch:cloudflared
 bun scripts/bootstrap-engine.sh

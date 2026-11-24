@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>dev.linuxscreenshare.app</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+  <name>Linux Screen Share</name>
+  <summary>Share this Linux screen to any TV or browser</summary>
+  <description>
+    <p>
+      One window, one button. Shares the desktop over the local network or a
+      Cloudflare tunnel. Viewers open a link in any browser, including smart TV
+      browsers. Desktop audio plays on the viewing device and can be muted
+      from the viewer.
+    </p>
+  </description>
+  <launchable type="desktop-id">screen-share.desktop</launchable>
+  <url type="homepage">https://github.com/Hussseinkizz/linux-share-screen</url>
+  <url type="bugtracker">https://github.com/Hussseinkizz/linux-share-screen/issues</url>
+  <developer_name>Hussseinkizz</developer_name>
+  <categories>
+    <category>Network</category>
+    <category>RemoteAccess</category>
+  </categories>
+  <releases>
+    <release version="1.2.0" date="2026-11-24"/>
+  </releases>
+</component>
