@@ -13,7 +13,7 @@
       from the viewer.
     </p>
   </description>
-  <launchable type="desktop-id">screen-share.desktop</launchable>
+  <launchable type="desktop-id">dev.linuxscreenshare.app.desktop</launchable>
   <url type="homepage">https://github.com/Hussseinkizz/linux-share-screen</url>
   <url type="bugtracker">https://github.com/Hussseinkizz/linux-share-screen/issues</url>
   <developer_name>Hussseinkizz</developer_name>
