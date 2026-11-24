@@ -4,7 +4,7 @@ export default {
 	app: {
 		name: "Screen Share",
 		identifier: "dev.linuxscreenshare.app",
-		version: "1.0.1",
+		version: "1.1.0",
 	},
 	build: {
 		copy: {
