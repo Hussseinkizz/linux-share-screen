@@ -233,3 +233,61 @@ dies; no pnpm/CLI/Caddy/sudo required.
 
 **Phase 2:** same with Internet mode over `https://*.trycloudflare.com` with no
 certificate prompt on a TV browser.
+
+## 13. Audio (v1.1.0)
+
+Goal: desktop audio plays on the viewing device, with instant mute and
+unmute. Microphone capture is not part of this release.
+
+### Transport
+
+A second WebSocket endpoint `/audio` on the same engine port, authenticated
+the same way as `/stream`. Audio does not share the video message envelope,
+so the video protocol stays untouched. Each frame carries:
+
+```
+u64 timestamp_us | u16 sample_rate | u8 channels | u8 reserved | PCM payload
+```
+
+Payload is s16le, 48 kHz, stereo. A 20 ms chunk is 3840 bytes, about 1.5 Mbps
+while unmuted. Audio sockets are view-only and do not count against the video
+viewer slots.
+
+### Capture
+
+The engine spawns bundled `parec` on the default sink monitor. The app
+resolves the monitor device with bundled `pactl` before startup and passes
+`--audio-device`. If capture fails, video continues and the UI reports audio
+unavailable. Both binaries ship in `resources/`; no host installation.
+
+### Playback and sync
+
+Viewer buffers 60 to 120 ms, schedules chunks through an `AudioContext`
+playhead, and drops late chunks. Video stays on its current clock; audio drift
+is corrected by trimming the buffer.
+
+### Mute
+
+Viewer has a speaker button that mutes locally through a gain node. Mute is
+remembered per device. The app window has a Share audio switch used at
+startup. Both are instant and do not restart the stream.
+
+### ADR-015, separate audio socket
+The video protocol stays at version 1. Audio uses its own endpoint and framing.
+Consequence: no risk to existing clients, at the cost of a second WebSocket.
+
+### ADR-016, PCM before Opus
+Raw PCM avoids new build dependencies and works in every browser through Web
+Audio. Cost is bandwidth. Opus can replace the payload later without changing
+the endpoint.
+
+### ADR-017, bundled capture helpers
+`parec` and `pactl` are small LGPL binaries. Shipping them keeps the install
+path free of host package steps.
+
+### ADR-018, distribution
+`.deb` declares runtime dependencies so the package manager installs them.
+AppImage must bundle GTK and WebKit to satisfy the default install path; that
+is the next packaging task. A sandboxed store build (Flatpak) additionally
+requires an xdg-desktop-portal ScreenCast backend in the engine, because
+sandboxed apps cannot capture the desktop directly.
